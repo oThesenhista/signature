@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>E-Mail Signature Generator</title>
+
+    <style media="screen">
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #6a9cd0;
+      }
+      .margin-area {
+        margin-top: 5%;
+        width: 100%;
+      }
+      .content-box {
+        background-color: #fff;
+        border-radius: 20px;
+        width: 800px;
+        height: 250px;
+        margin: auto;
+      }
+      .content-form {
+        background-color: #fff;
+        padding:20px;
+        border-radius: 20px;
+        width:430px;
+        margin: auto;
+      }
+      .avatar img {
+        max-width: 150px;
+        margin: 25px;
+        float: left;
+      }
+      .name {
+        line-height: 100%;
+        font-family: "arial";
+        font-weight: 600;
+        font-size: 24px;
+        color:#213a6a;
+        text-transform: capitalize;
+      }
+      .office {
+        font-family: "arial";
+        font-weight: 300;
+        font-size: 14px;
+        color:#213a6a;
+        text-transform: capitalize;
+      }
+      .center {
+        margin:8%;
+        padding-top:20px;
+
+      }
+      input {
+        padding: 10px;
+        width: 94%;
+        margin: 3px;
+        border: 1px solid #eef1f5;
+        border-radius: 5px;
+      }
+      .form {
+        width:430px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #213a6a;
+        font-size: 14px;
+      }
+
+      #off {
+        display: table-row;
+      }
+
+      input[type="checkbox"] {
+        width: 0;
+        height: 22px;
+        margin: 2px 5px 5px 0px;
+        border: none;
+        padding: 10px;
+      }
+      input[type="checkbox"]:before {
+        content: url('img/hide.png');
+        display: block;
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+      }
+      input[type="checkbox"]:checked:before {
+        content: url('img/show.png');
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <div class="margin-area">
+      <div class="content-box">
+        <div id="sample" class="center">
+          <table style="text-align: left; width: 750px; height: 202px;" border="0"
+          cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr>
+            <!-- AVATAR -->
+                <td style="vertical-align: top; height: 200px; width: 230px;">
+                  <div style=" border: 1px solid #f7fafe; width:200px; height: 200px;
+                  border-radius:200px;">
+                    <canvas hidden></canvas>
+                    <img id="preview" src=""></img>
+                  </div>
+                </td>
+            <!-- NOME/CARGO -->
+                <td style="vertical-align: middle; width: 200px; padding-left:20px;">
+                  <div class="name" id="nome">
+                    Nome Sobrenome
+                  </div>
+                  <div class="office" id="cargo">
+                    Cargo
+                  </div>
+                </td>
+                <td style="vertical-align: middle; height: 5px; width: 10px;"><img src="img/divider2.png" alt=""></td>
+                <td style="vertical-align: middle; width: 600px;">
+                  <table style="text-align: left; width: 100%;" cellpadding="0" cellspacing="0">
+                    <tbody>
+                      <tr>
+            <!-- TELEFONE -->
+                        <td style="width: 40px; text-align: center; height: 26px;">
+                          <img src="img/tele_icon.png" style="margin-top:5px"></td>
+                        <td class="office"><a href="tel:" id="tel-first">(00) 0 0000-0000</a></td>
+                      </tr>
+            <!-- CELULAR -->
+                      <tr id="off">
+                        <td style="width: 40px; text-align: center; height: 26px;">
+                          <img src="img/tele_icon.png" style="margin-top:5px"></td>
+                        <td class="office"><a href="tel:" id="tel-second">(00) 0 0000-0000</a></td>
+                      </tr>
+                      <tr>
+            <!-- EMAIL -->
+                        <td style="width: 40px; height: 26px; text-align: center;">
+                          <img src="img/email_icon.png" style="margin-top:5px"></td>
+                        <td class="office"><a href="mailto:" id="email">email@empresa.com</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <img src="img/logos_mini.png" style="margin:5px 10px;">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<!-- FOMULARIO -->
+<center>
+  <a href="#" onclick="CopyToClipboard('sample');return false;"
+  style="background: #233f78; padding:20px; border-radius: 15px; color: #fff; text-decoration: none;
+  font-family: arial; font-weight:600;">COPY</a>
+</center>
+    <div class="margin-area">
+      <div class="content-form">
+        <div class="form" id="form-input">
+          <input type="text" placeholder="Nome" target="nome">
+          <input type="text" placeholder="Cargo" target="cargo">
+          <input type="text" placeholder="Telefone" target="tel-first" link="tel:">
+          <input type="text" placeholder="Celular" style="width:85%; margin-right:0;"
+          target="tel-second" link="tel:"><input onclick="myFunction()" type="checkbox" />
+          <input type="text" placeholder="E-Mail" target="email" link="mailto:">
+          <input type="file" id="image-input" accept="image/*" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+    // get a reference to the file input
+    const fileInput = document.getElementById("image-input");
+
+    // get a reference to the output canvas
+    const canvas = document.querySelector("canvas");
+
+    // listen for the change event so we can capture the file
+    fileInput.addEventListener("change", (e) => {
+      // get a reference to the file
+      const file = e.target.files[0];
+
+      // let's load the image data
+      const image = new Image();
+      image.onload = () => {
+        // use min size so we get a square
+        const size = Math.min(200, 200);
+
+        // let's update the canvas size
+        canvas.width = size;
+        canvas.height = size;
+
+        // draw image to canvas
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, 200, 200);
+
+        // only draw image where mask is
+        ctx.globalCompositeOperation = "destination-in";
+
+        // draw our circle mask
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.arc(
+          size * 0.5, // x
+          size * 0.5, // y
+          size * 0.5, // radius
+          0, // start angle
+          2 * Math.PI // end angle
+        );
+        ctx.fill();
+
+        // restore to default composite operation (is draw over current image)
+        ctx.globalCompositeOperation = "source-over";
+
+        // show canvas
+        // canvas.hidden = false;
+        var imgurl = canvas.toDataURL();
+        document.getElementById("preview").src = imgurl;
+        };
+        image.src = URL.createObjectURL(file);
+    });
+  </script>
+
+    <script>
+      function CopyToClipboard(id)
+      {
+        var r = document.createRange();
+        r.selectNode(document.getElementById(id));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(r);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+      }
+    </script>
+
+    <script>
+      var inputs = document.querySelectorAll("div#form-input input[type='text']");
+      for(var i=0; i<inputs.length; i++){
+        inputs[i].addEventListener("keyup",(e) => {
+          var target = e.target.getAttribute("target");
+          var value = e.target.value;
+          document.getElementById(target).innerHTML=value;
+          var link = e.target.getAttribute("link");
+          if (link){
+            link += value;
+            document.getElementById(target).href = link;
+          }
+        })
+      }
+    </script>
+
+    <script>
+    function myFunction() {
+      var x = document.getElementById("off");
+      if (x.style.display === "none") {
+        x.style.display = "table-row";
+      } else {
+        x.style.display = "none";
+      }
+    }
+  </script>
+
+
+
+  </body>
+</html>
